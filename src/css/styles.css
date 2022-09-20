@@ -13,57 +13,7 @@ body {
   line-height: 1.5;
 }
 
-#search-box {
-  font: inherit;
-  padding: 8px;
-  max-width: 320px;
-  margin-bottom: 16px;
-}
 
-.country-list {
-  padding-left: 10px;
-}
-
-.item {
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-
-  margin-bottom: 10px;
-}
-
-.item:last-child {
-  margin-bottom: 0;
-}
-
-.country-img {
-  margin-right: 15px;
-}
-
-.country-name {
-  margin: 0;
-  padding: 0;
-  font-size: 20px;
-  color: rgba(33, 33, 33, 0.85);
-}
-
-.country-info {
-  margin: 0 auto;
-  padding: 0 25px;
-}
-
-.country-box {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.country-title {
-  font-size: 32px;
-  margin: 0;
-}
 
 p {
   color: blue;
