@@ -2,14 +2,6 @@
 const BASE_URL = 'https://pixabay.com/api/';
 const KEY = '30059530-99c96b166b7120acaaa07225e';
 
-/**Список параметрів рядка запиту, які тобі обов'язково необхідно вказати:
-
-key +
-q + те, що вводить користувач в інпут
-image_type +
-orientation +
-safesearch +
- */
 
 const searchParams = new URLSearchParams({
     key: KEY,
@@ -18,9 +10,18 @@ const searchParams = new URLSearchParams({
     safesearch: true,
 });
 
-export function fetchImages(valueUser) {
-    return fetch(`${BASE_URL}?${searchParams}&q=${valueUser}`)
+export function fetchImages(searchImg) {
+    return fetch(`${BASE_URL}?${searchParams}&q=${searchImg}`)
     .then((response) => {
 
         return response.json()});
 }
+
+// Асинхронна функція - не працює!!!
+
+// export async function fetchImages(valueUser) {
+//     const request = await fetch(`${BASE_URL}?${searchParams}&q=${valueUser}`);
+//     const response = await response.json();
+
+//     return response;
+// }
