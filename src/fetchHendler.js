@@ -12,10 +12,11 @@ const searchParams = new URLSearchParams({
     orientation: 'horizontal',
     safesearch: true,
     per_page: 40,
+    page: page,
 });
 
 export function fetchImages(searchImg) {
-    return fetch(`${BASE_URL}?${searchParams}&q=${searchImg}&page=10`)
+    return fetch(`${BASE_URL}?${searchParams}&q=${searchImg}`)
     .then((response) => {
 
         return response.json()});
