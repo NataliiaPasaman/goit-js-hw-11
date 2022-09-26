@@ -2,9 +2,7 @@
 const BASE_URL = 'https://pixabay.com/api/';
 const KEY = '30059530-99c96b166b7120acaaa07225e';
 
-// let per_page = 10;
 let page = 1;
-
 
 const searchParams = new URLSearchParams({
     key: KEY,
@@ -15,12 +13,14 @@ const searchParams = new URLSearchParams({
     page: page,
 });
 
-export function fetchImages(searchImg) {
+function fetchImages(searchImg) {
     return fetch(`${BASE_URL}?${searchParams}&q=${searchImg}`)
     .then((response) => {
 
         return response.json()});
 }
+
+export { page, fetchImages };
 
 // Асинхронна функція - не працює!!!
 

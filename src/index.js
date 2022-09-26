@@ -1,6 +1,6 @@
 import './css/styles.css';
 import { Notify } from 'notiflix';
-import { fetchImages } from './fetchHendler';
+import { page, fetchImages } from './fetchHendler';
 
 const refs = {
   form: document.getElementById('search-form'),
@@ -29,6 +29,7 @@ function onSearchImage(event) {
     }
 
     renderMarkup(arrayImages);
+    page += 1;
   });
 }
 
@@ -37,7 +38,7 @@ function renderMarkup(images) {
   const imageCard = images
     .map(({ webformatURL, tags, likes, views, comments, downloads }) => {
       return `<div class="photo-card">
-    <img src="${webformatURL}" alt="${tags}" loading="lazy" width="250" />
+    <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" height="100" />
     <div class="info">
       <p class="info-item">
         <b>${likes} Likes</b>
