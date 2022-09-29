@@ -1,27 +1,4 @@
 
-const BASE_URL = 'https://pixabay.com/api/';
-const KEY = '30059530-99c96b166b7120acaaa07225e';
-
-let page = 1;
-
-const searchParams = new URLSearchParams({
-    key: KEY,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: true,
-    per_page: 40,
-    page: page,
-});
-
-function fetchImages(searchImg) {
-    return fetch(`${BASE_URL}?${searchParams}&q=${searchImg}`)
-    .then((response) => {
-
-        return response.json()});
-}
-
-export { page, fetchImages };
-
 // Асинхронна функція - не працює!!!
 
 // export async function fetchImages(valueUser) {
@@ -30,3 +7,46 @@ export { page, fetchImages };
 
 //     return response;
 // }
+
+export class PixabeyImages {
+  constructor() {
+    this.searchQuery = '';
+    this.page = 1;
+    this.arrayImages = [];
+  }
+
+  fetchImages() {
+    const BASE_URL = 'https://pixabay.com/api/';
+    const KEY = '30059530-99c96b166b7120acaaa07225e';
+
+    const searchParams = new URLSearchParams({
+      key: KEY,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: true,
+      per_page: 40,
+      page: this.page,
+    });
+
+    return fetch(`${BASE_URL}?${searchParams}&q=${this.searchQuery}`)
+    .then(response => {
+        return response.json();
+      })
+      .then(dataImages => {
+        this.page += 1;
+        return dataImages.hits;
+      });
+  }
+
+  get query() {
+    return this.searchQuery;
+  }
+
+  set query(newQuery) {
+    this.searchQuery = newQuery;
+  }
+
+  resetPage() {
+    this.page = 1;
+  }
+}
