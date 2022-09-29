@@ -1,35 +1,57 @@
 import './css/styles.css';
 import { Notify } from 'notiflix';
-import { page, fetchImages } from './fetchHendler';
+import { PixabeyImages } from './fetchHendler';
+
+const api = new PixabeyImages;
+// largeImageURL - посилання на велике зображення.
 
 const refs = {
   form: document.getElementById('search-form'),
   input: document.querySelector('[name="searchQuery"]'),
   gallery: document.querySelector('.gallery'),
+  btn_load: document.querySelector('.load-more'),
 }
+// let totalPage;
+hideBtnLoadMore();
 
 refs.form.addEventListener('submit', onSearchImage);
+refs.btn_load.addEventListener('click', onLoadMore);
 
 // Хендлер - спрацьовує при сабміті форми
 function onSearchImage(event) {
   event.preventDefault();
 
-  const searchQuery = refs.input.value;
+  api.searchQuery = refs.input.value;
+  api.resetPage();
+  hideBtnLoadMore();
+  clearGallery();
 
-/** Під час пошуку за новим ключовим словом необхідно повністю очищати вміст галереї, 
- * щоб не змішувати результати. */
-
-  fetchImages(searchQuery)
-  .then(dataImages => {
-    const arrayImages = dataImages.hits;
-    console.log(arrayImages);
-
+  api.fetchImages()
+  .then(arrayImages => {
     if (arrayImages.length === 0) {
       showNotifyMessage();
     }
 
+  renderMarkup(arrayImages);
+  showBtnLoadMore();
+});
+
+    
+
+//     totalPage = (dataImages.totalHits) / 40;
+
+//     if(page > totalPage) {
+//       refs.btn_load.classList.add('visually-hidden');
+//       console.log("We're sorry, but you've reached the end of search results.");
+//       return;
+//     }
+//   });
+}
+
+function onLoadMore() {
+  api.fetchImages()
+  .then(arrayImages => {
     renderMarkup(arrayImages);
-    page += 1;
   });
 }
 
@@ -59,14 +81,21 @@ function renderMarkup(images) {
 
   refs.gallery.insertAdjacentHTML('beforeend', imageCard);
 }
-// largeImageURL - посилання на велике зображення.
-
 
 // Функція очищення галереї при новому запиті
 function clearGallery () {
   refs.gallery.innerHTML = '';
 }
 
+// Невалідний запит - показуємо повідомлення
 function showNotifyMessage () {
   Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+}
+
+function hideBtnLoadMore() {
+  refs.btn_load.classList.add('visually-hidden');
+}
+
+function showBtnLoadMore() {
+  refs.btn_load.classList.remove('visually-hidden');
 }
