@@ -13,6 +13,7 @@ export class PixabeyImages {
     this.searchQuery = '';
     this.page = 1;
     this.arrayImages = [];
+    this.totalImages = 0;
   }
 
   fetchImages() {
@@ -34,6 +35,7 @@ export class PixabeyImages {
       })
       .then(dataImages => {
         this.page += 1;
+        this.totalImages = dataImages.totalHits;
         return dataImages.hits;
       });
   }
