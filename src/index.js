@@ -1,11 +1,11 @@
 import './css/styles.css';
 import { Notify } from 'notiflix';
 import { PixabeyImages } from './fetchHendler';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const api = new PixabeyImages;
 let totalPages = null;
-// console.log(api);
-// largeImageURL - посилання на велике зображення.
 
 const refs = {
   form: document.getElementById('search-form'),
@@ -34,7 +34,9 @@ function onSearchImage(event) {
       showNotifyMessage();
     }
 
+  showQuantityImages(api.totalImages);
   renderMarkup(arrayImages);
+  addSimpleLightBox();
   showBtnLoadMore();
 
   totalPages = api.totalImages / 40;
@@ -42,17 +44,14 @@ function onSearchImage(event) {
     showMessageInEndImages();
   }
 });
-
-    /** У відповіді бекенд повертає властивість totalHits - загальна кількість зображень, які відповідають 
-     * критерію пошуку (для безкоштовного акаунту). Якщо користувач дійшов до кінця колекції, ховай кнопку 
-     * і виводь повідомлення з текстом "We're sorry, but you've reached the end of search results.". */
 }
 
-
+//Функція по загрузці більшої кількості карток при клікові на кнопку
 function onLoadMore() {
   api.fetchImages()
   .then(arrayImages => {
     renderMarkup(arrayImages);
+    addSimpleLightBox();
 
     totalPages = api.totalImages / 40;
     if(api.page > totalPages) {
@@ -64,9 +63,11 @@ function onLoadMore() {
 // Рендеримо зображення на сторінку
 function renderMarkup(images) {
   const imageCard = images
-    .map(({ webformatURL, tags, likes, views, comments, downloads }) => {
+    .map(({ largeImageURL, webformatURL, tags, likes, views, comments, downloads }) => {
       return `<div class="photo-card">
-    <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" height="100" />
+      <a class="gallery__item" href="${largeImageURL}">
+    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" width="150" height="100" />
+    </a>
     <div class="info">
       <p class="info-item">
         <b>${likes} Likes</b>
@@ -81,6 +82,7 @@ function renderMarkup(images) {
         <b>${downloads} Downloads</b>
       </p>
     </div>
+
   </div>`;
     })
     .join('');
@@ -98,16 +100,33 @@ function showNotifyMessage () {
   Notify.failure('Sorry, there are no images matching your search query. Please try again.');
 }
 
+//функція сховати кнопку "Load More"
 function hideBtnLoadMore() {
   refs.btn_load.classList.add('visually-hidden');
 }
 
+//функція показати кнопку "Load More"
 function showBtnLoadMore() {
   refs.btn_load.classList.remove('visually-hidden');
 }
 
+//Функція показати повідомлення, коли закінчилась колекція зображень
 function showMessageInEndImages() {
   hideBtnLoadMore();
   Notify.warning("We're sorry, but you've reached the end of search results.");
 }
 
+// Функція показати повідомлення з кількістю знайдених зображень
+function showQuantityImages(quantityImages) {
+  Notify.success(`Hooray! We found ${quantityImages} images.`);
+}
+
+//Додавання бібліотеки SimpleLightBox для перегляду фото
+function addSimpleLightBox() {
+  let galleryLightBox = new SimpleLightbox(".gallery a", {
+    captionsData: "alt",
+    captionPosition: "bottom",
+    captionDelay: 250,
+  });
+  galleryLightBox.refresh();
+}
