@@ -10,30 +10,34 @@ export class PixabeyImages {
     this.totalImages = 0;
   }
 
-  fetchImages() {
+  async fetchImages() {
     const searchParams = new URLSearchParams({
-        key: KEY,
-        image_type: 'photo',
-        orientation: 'horizontal',
-        safesearch: true,
-        per_page: 40,
-        page: this.page,
-      });
+      key: KEY,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: true,
+      per_page: 40,
+      page: this.page,
+    });
 
-    return fetch(`${BASE_URL}?${searchParams}&q=${this.searchQuery}`)
-    .then(response => {
-        if(!response.ok) {
-            throw new Error(response.status);
-        }
-        return response.json()})
-    .then(dataImages => {
-        this.page += 1;
-        this.totalImages = dataImages.totalHits;
-        return dataImages.hits;
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    try {
+      const response = await fetch(
+        `${BASE_URL}?${searchParams}&q=${this.searchQuery}`
+      );
+
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+
+      const dataImages = await response.json();
+      this.page += 1;
+      this.totalImages = dataImages.totalHits;
+
+      const images = await dataImages.hits;
+      return images;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   get query() {
@@ -48,4 +52,3 @@ export class PixabeyImages {
     this.page = 1;
   }
 }
-

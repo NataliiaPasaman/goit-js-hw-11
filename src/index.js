@@ -32,6 +32,7 @@ function onSearchImage(event) {
   .then(arrayImages => {
     if (arrayImages.length === 0) {
       showNotifyMessage();
+      return;
     }
 
   showQuantityImages(api.totalImages);
