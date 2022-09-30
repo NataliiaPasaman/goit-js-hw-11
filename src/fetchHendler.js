@@ -1,12 +1,6 @@
 
-// Асинхронна функція - не працює!!!
-
-// export async function fetchImages(valueUser) {
-//     const request = await fetch(`${BASE_URL}?${searchParams}&q=${valueUser}`);
-//     const response = await response.json();
-
-//     return response;
-// }
+const BASE_URL = 'https://pixabay.com/api/';
+const KEY = '30059530-99c96b166b7120acaaa07225e';
 
 export class PixabeyImages {
   constructor() {
@@ -17,26 +11,28 @@ export class PixabeyImages {
   }
 
   fetchImages() {
-    const BASE_URL = 'https://pixabay.com/api/';
-    const KEY = '30059530-99c96b166b7120acaaa07225e';
-
     const searchParams = new URLSearchParams({
-      key: KEY,
-      image_type: 'photo',
-      orientation: 'horizontal',
-      safesearch: true,
-      per_page: 40,
-      page: this.page,
-    });
+        key: KEY,
+        image_type: 'photo',
+        orientation: 'horizontal',
+        safesearch: true,
+        per_page: 40,
+        page: this.page,
+      });
 
     return fetch(`${BASE_URL}?${searchParams}&q=${this.searchQuery}`)
     .then(response => {
-        return response.json();
-      })
-      .then(dataImages => {
+        if(!response.ok) {
+            throw new Error(response.status);
+        }
+        return response.json()})
+    .then(dataImages => {
         this.page += 1;
         this.totalImages = dataImages.totalHits;
         return dataImages.hits;
+      })
+      .catch(error => {
+        console.log(error);
       });
   }
 
@@ -52,3 +48,12 @@ export class PixabeyImages {
     this.page = 1;
   }
 }
+
+// Асинхронна функція - не працює!!!
+
+// export async function fetchImages(valueUser) {
+//     const request = await fetch(`${BASE_URL}?${searchParams}&q=${valueUser}`);
+//     const response = await response.json();
+
+//     return response;
+// }

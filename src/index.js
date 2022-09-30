@@ -3,6 +3,7 @@ import { Notify } from 'notiflix';
 import { PixabeyImages } from './fetchHendler';
 
 const api = new PixabeyImages;
+let totalPages = null;
 // console.log(api);
 // largeImageURL - посилання на велике зображення.
 
@@ -12,9 +13,8 @@ const refs = {
   gallery: document.querySelector('.gallery'),
   btn_load: document.querySelector('.load-more'),
 }
-// let totalPage;
+
 hideBtnLoadMore();
-let endImages = '';
 
 refs.form.addEventListener('submit', onSearchImage);
 refs.btn_load.addEventListener('click', onLoadMore);
@@ -26,7 +26,6 @@ function onSearchImage(event) {
   api.searchQuery = refs.input.value;
   api.resetPage();
   hideBtnLoadMore();
-  // removeText();
   clearGallery();
 
   api.fetchImages()
@@ -38,12 +37,10 @@ function onSearchImage(event) {
   renderMarkup(arrayImages);
   showBtnLoadMore();
 
-  const totalPages = api.totalImages / 40;
+  totalPages = api.totalImages / 40;
   if(api.page > totalPages) {
-    showTextInEndImages();
+    showMessageInEndImages();
   }
-  // removeText(endImages);
-
 });
 
     /** У відповіді бекенд повертає властивість totalHits - загальна кількість зображень, які відповідають 
@@ -51,26 +48,16 @@ function onSearchImage(event) {
      * і виводь повідомлення з текстом "We're sorry, but you've reached the end of search results.". */
 }
 
-function showTextInEndImages() {
-    hideBtnLoadMore();
-    endImages = document.createElement('p');
-    endImages.classList.add('visually-hidden-text')
-    endImages.textContent = "We're sorry, but you've reached the end of search results.";
-
-  //   endImages = `<p class="visually-hidden-text">We're sorry, but you've reached the end of search results.</p>`;
-  //  return refs.gallery.insertAdjacentHTML('afterend', endImages);
-    refs.gallery.after(endImages);
-    return endImages;
-}
-
-function removeText() {
-  endImages.classList.remove('visually-hidden-text');
-}
 
 function onLoadMore() {
   api.fetchImages()
   .then(arrayImages => {
     renderMarkup(arrayImages);
+
+    totalPages = api.totalImages / 40;
+    if(api.page > totalPages) {
+      showMessageInEndImages();
+    }
   });
 }
 
@@ -119,11 +106,8 @@ function showBtnLoadMore() {
   refs.btn_load.classList.remove('visually-hidden');
 }
 
-// function showTextInEndImages(api) {
-//   const totalPages = api.totalImages / 40;
-//   if(api.page > totalPages) {
-//     hideBtnLoadMore();
-//     const endImages = "<p>We're sorry, but you've reached the end of search results.</p>";
-//     refs.gallery.insertAdjacentHTML('afterend', endImages);
-//   }
-// }
+function showMessageInEndImages() {
+  hideBtnLoadMore();
+  Notify.warning("We're sorry, but you've reached the end of search results.");
+}
+
