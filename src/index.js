@@ -39,6 +39,7 @@ function onSearchImage(event) {
   renderMarkup(arrayImages);
   addSimpleLightBox();
   showBtnLoadMore();
+  smoothScroll();
 
   totalPages = api.totalImages / 40;
   if(api.page > totalPages) {
@@ -54,6 +55,7 @@ function onLoadMore() {
   .then(arrayImages => {
     renderMarkup(arrayImages);
     addSimpleLightBox();
+    smoothScroll();
 
     totalPages = api.totalImages / 40;
     if(api.page > totalPages) {
@@ -135,4 +137,16 @@ function addSimpleLightBox() {
     captionDelay: 250,
   });
   galleryLightBox.refresh();
+}
+
+// Функція плавний скролл
+function smoothScroll() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
