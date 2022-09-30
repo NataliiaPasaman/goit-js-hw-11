@@ -66,20 +66,24 @@ function renderMarkup(images) {
     .map(({ largeImageURL, webformatURL, tags, likes, views, comments, downloads }) => {
       return `<div class="photo-card">
       <a class="gallery__item" href="${largeImageURL}">
-    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" width="150" height="100" />
+    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" width="220" height="170" />
     </a>
     <div class="info">
       <p class="info-item">
-        <b>${likes} Likes</b>
+      Likes <br/>
+        <b>${likes}</b>
       </p>
       <p class="info-item">
-        <b>${views} Views</b>
+      Views <br/>
+        <b>${views}</b>
       </p>
       <p class="info-item">
-        <b>${comments} Comments</b>
+      Comments <br/>
+        <b>${comments}</b>
       </p>
-      <p class="info-item">
-        <b>${downloads} Downloads</b>
+      <p class="info-item last_item">
+      Downloads <br/>
+        <b>${downloads}</b>
       </p>
     </div>
 

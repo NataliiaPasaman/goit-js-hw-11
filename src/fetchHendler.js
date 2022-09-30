@@ -49,11 +49,3 @@ export class PixabeyImages {
   }
 }
 
-// Асинхронна функція - не працює!!!
-
-// export async function fetchImages(valueUser) {
-//     const request = await fetch(`${BASE_URL}?${searchParams}&q=${valueUser}`);
-//     const response = await response.json();
-
-//     return response;
-// }
