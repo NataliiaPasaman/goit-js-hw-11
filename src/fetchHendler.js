@@ -1,3 +1,4 @@
+import axios from "axios";
 
 const BASE_URL = 'https://pixabay.com/api/';
 const KEY = '30059530-99c96b166b7120acaaa07225e';
@@ -21,19 +22,14 @@ export class PixabeyImages {
     });
 
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `${BASE_URL}?${searchParams}&q=${this.searchQuery}`
       );
 
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-
-      const dataImages = await response.json();
       this.page += 1;
-      this.totalImages = dataImages.totalHits;
+      this.totalImages = response.data.totalHits;
 
-      const images = await dataImages.hits;
+      const images = await response.data.hits;
       return images;
     } catch (error) {
       console.log(error);

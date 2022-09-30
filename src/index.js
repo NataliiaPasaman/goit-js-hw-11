@@ -44,7 +44,8 @@ function onSearchImage(event) {
   if(api.page > totalPages) {
     showMessageInEndImages();
   }
-});
+})
+.catch(error => console.log(error));
 }
 
 //Функція по загрузці більшої кількості карток при клікові на кнопку
