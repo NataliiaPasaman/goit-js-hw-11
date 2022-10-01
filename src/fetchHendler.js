@@ -26,7 +26,7 @@ export class PixabeyImages {
         `${BASE_URL}?${searchParams}&q=${this.searchQuery}`
       );
 
-      this.page += 1;
+    //   this.page += 1;
       this.totalImages = response.data.totalHits;
 
       const images = await response.data.hits;

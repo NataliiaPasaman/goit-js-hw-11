@@ -7,6 +7,12 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 const api = new PixabeyImages;
 let totalPages = null;
 
+let galleryLightBox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
+
 const refs = {
   form: document.getElementById('search-form'),
   input: document.querySelector('[name="searchQuery"]'),
@@ -37,12 +43,12 @@ function onSearchImage(event) {
 
   showQuantityImages(api.totalImages);
   renderMarkup(arrayImages);
-  addSimpleLightBox();
+  galleryLightBox.refresh();
   showBtnLoadMore();
   smoothScroll();
 
-  totalPages = api.totalImages / 40;
-  if(api.page > totalPages) {
+  totalPages = Math.ceil(api.totalImages / 40);
+  if(api.page >= totalPages) {
     showMessageInEndImages();
   }
 })
@@ -51,14 +57,16 @@ function onSearchImage(event) {
 
 //Функція по загрузці більшої кількості карток при клікові на кнопку
 function onLoadMore() {
+  api.page += 1;
+
   api.fetchImages()
   .then(arrayImages => {
     renderMarkup(arrayImages);
-    addSimpleLightBox();
+    galleryLightBox.refresh();
     smoothScroll();
 
-    totalPages = api.totalImages / 40;
-    if(api.page > totalPages) {
+    totalPages = Math.ceil(api.totalImages / 40);
+    if(api.page >= totalPages) {
       showMessageInEndImages();
     }
   });
@@ -127,16 +135,6 @@ function showMessageInEndImages() {
 // Функція показати повідомлення з кількістю знайдених зображень
 function showQuantityImages(quantityImages) {
   Notify.success(`Hooray! We found ${quantityImages} images.`);
-}
-
-//Додавання бібліотеки SimpleLightBox для перегляду фото
-function addSimpleLightBox() {
-  let galleryLightBox = new SimpleLightbox(".gallery a", {
-    captionsData: "alt",
-    captionPosition: "bottom",
-    captionDelay: 250,
-  });
-  galleryLightBox.refresh();
 }
 
 // Функція плавний скролл
