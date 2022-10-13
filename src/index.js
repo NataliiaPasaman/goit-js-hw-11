@@ -40,7 +40,7 @@ function onSearchImage(event) {
   renderMarkup(arrayImages);
   galleryLightBox.refresh();
   showBtnLoadMore();
-  // smoothScroll();
+  smoothScroll();
 
   totalPages = Math.ceil(api.totalImages / 40);
   if(api.page >= totalPages) {
@@ -51,6 +51,7 @@ function onSearchImage(event) {
 }
 
 //Функція по загрузці більшої кількості карток при клікові на кнопку
+//Викликаємо цю функцію для безкінечного скрола
 function onLoadMore() {
   api.page += 1;
 
@@ -63,7 +64,12 @@ function onLoadMore() {
     totalPages = Math.ceil(api.totalImages / 40);
     if(api.page >= totalPages) {
       showMessageInEndImages();
-    }
+    };
+
+    if(arrayImages.length < 40) {
+      observer.unobserve(refs.btn_load);
+      return;
+    };
   });
 }
 export { onLoadMore };
@@ -141,7 +147,7 @@ function smoothScroll() {
     .firstElementChild.getBoundingClientRect();
 
   window.scrollBy({
-    top: cardHeight * 2,
+    top: cardHeight * 1,
     behavior: 'smooth',
   });
 }

@@ -1,7 +1,6 @@
 import refs from './refs';
 import { onLoadMore } from './index';
 import { api } from './index';
-// import './index.js';
 
 // const div = document.createElement('div');
 // div.classList.add('before-scroll');
@@ -11,10 +10,10 @@ import { api } from './index';
 const options = {
     rootMargin: '400px',
 }
-const callback = function(entries, observer) {
+const callbackEntry = function(entries, observer) {
     entries.forEach(entry => {
         if(entry.isIntersecting) {
-            console.log("Привет");
+
             if(!api.searchQuery) {
                 return;
             }
@@ -23,13 +22,7 @@ const callback = function(entries, observer) {
     });
 };
 
-const observer = new IntersectionObserver(callback, options);
+const observer = new IntersectionObserver(callbackEntry, options);
 observer.observe(refs.btn_load);
 
 export { observer };
-
-
-//Якщо контент закінчився - IntersectionObserver.unobserve()
-//припиняє спостерігати за змінами видимості цільового елемента
-
-// observer.unobserve(document.getElementById("elementToObserve"));

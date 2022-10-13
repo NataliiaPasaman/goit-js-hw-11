@@ -28,7 +28,6 @@ export class PixabeyImages {
 
     //   this.page += 1;
       this.totalImages = response.data.totalHits;
-      console.log(this.totalImages);
 
       const images = await response.data.hits;
       console.log('images', images);
