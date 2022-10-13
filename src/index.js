@@ -1,10 +1,12 @@
 import './css/styles.css';
+import refs from './refs';
 import { Notify } from 'notiflix';
 import { PixabeyImages } from './fetchHendler';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
+import { observer } from './infinity_scroll';
 
-const api = new PixabeyImages;
+export const api = new PixabeyImages;
 let totalPages = null;
 
 let galleryLightBox = new SimpleLightbox('.gallery a', {
@@ -12,13 +14,6 @@ let galleryLightBox = new SimpleLightbox('.gallery a', {
   captionPosition: 'bottom',
   captionDelay: 250,
 });
-
-const refs = {
-  form: document.getElementById('search-form'),
-  input: document.querySelector('[name="searchQuery"]'),
-  gallery: document.querySelector('.gallery'),
-  btn_load: document.querySelector('.load-more'),
-}
 
 hideBtnLoadMore();
 
@@ -45,7 +40,7 @@ function onSearchImage(event) {
   renderMarkup(arrayImages);
   galleryLightBox.refresh();
   showBtnLoadMore();
-  smoothScroll();
+  // smoothScroll();
 
   totalPages = Math.ceil(api.totalImages / 40);
   if(api.page >= totalPages) {
@@ -63,7 +58,7 @@ function onLoadMore() {
   .then(arrayImages => {
     renderMarkup(arrayImages);
     galleryLightBox.refresh();
-    smoothScroll();
+    // smoothScroll();
 
     totalPages = Math.ceil(api.totalImages / 40);
     if(api.page >= totalPages) {
@@ -71,6 +66,8 @@ function onLoadMore() {
     }
   });
 }
+export { onLoadMore };
+
 
 // Рендеримо зображення на сторінку
 function renderMarkup(images) {
