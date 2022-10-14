@@ -5,6 +5,7 @@ import { PixabeyImages } from './fetchHendler';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import { observer } from './infinity_scroll';
+import goSpinner from './spinner';
 
 export const api = new PixabeyImages;
 let totalPages = null;
@@ -25,6 +26,7 @@ function onSearchImage(event) {
   event.preventDefault();
 
   api.searchQuery = refs.input.value;
+
   api.resetPage();
   hideBtnLoadMore();
   clearGallery();
@@ -53,6 +55,7 @@ function onSearchImage(event) {
 //Функція по загрузці більшої кількості карток при клікові на кнопку
 //Викликаємо цю функцію для безкінечного скрола
 function onLoadMore() {
+  goSpinner();
   api.page += 1;
 
   api.fetchImages()

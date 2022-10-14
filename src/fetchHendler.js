@@ -30,7 +30,11 @@ export class PixabeyImages {
       this.totalImages = response.data.totalHits;
 
       const images = await response.data.hits;
-      console.log('images', images);
+      if (images){
+        refs.spinner.classList.add('visually-hidden');
+        return;
+      }
+
       return images;
     } catch (error) {
       console.log(error);
